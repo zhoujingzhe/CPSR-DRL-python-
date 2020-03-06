@@ -207,10 +207,10 @@ if __name__ == "__main__":
     trainIterations = 30
     file = "Setting\\niceEnv.json"
     Paramter.readfile(file=file)
-    psrType = "PSR"
-    RandomSamplingForPSR = False
+    psrType = "CPSR"
+    RandomSamplingForPSR = True
     isbuiltPSR = True
-    buildOnlyOnce = True
+    buildOnlyOnce = False
     game = niceEnv()
 
     #################################################
@@ -219,7 +219,6 @@ if __name__ == "__main__":
     rewardDict["-50.0"] = 2
     #################################################
 
-    # copyRewardDict(rewardDict=rewardDict, rewardDict1=StandTiger.Rewards)
     game.calulateMaxTestID()
     Paramter.maxTestID = game.maxTestID
     trainData = TrainingData()
@@ -258,6 +257,7 @@ if __name__ == "__main__":
                 aos = "Stay middle-ob 100.0"
                 aos = EncodeStringToTest(t=aos, rewardDict=rewardDict)
                 psrModel.Starting(aos=aos)
+                trainSet = None
             if buildOnlyOnce:
                 isbuiltPSR = False
         psrModel.saveModel(epoch=iters)
@@ -294,5 +294,3 @@ if __name__ == "__main__":
 
         trainData.WriteData(file="epilsonGreedySampling" + str(iters) + ".txt")
         iters = iters + 1
-        if not buildOnlyOnce:
-            trainSet = None

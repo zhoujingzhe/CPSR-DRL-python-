@@ -204,7 +204,7 @@ def loadCheckPoint(trainData, epoch, rewardDict):
         TrainingData.LoadData(TrainData=trainData, file="epilsonGreedySampling" + str(i) + ".txt",
                               rewardDict=rewardDict)
 
-from Util import writerMemoryintodisk
+from Util import writerMemoryintodisk, readMemoryfromdisk
 import sys
 import time
 from Util import ConvertLastBatchToTrainSet
@@ -220,8 +220,8 @@ if __name__ == "__main__":
     Paramter.readfile(file=file)
     RandomSamplingForPSR = True
     isbuiltPSR = True
-    onlyBuildOnce = False
-    psrType = "TPSR"
+    onlyBuildOnce = True
+    psrType = "CPSR"
     game = Tiger95()
     #################################################
     rewardDict["-100.0"] = 0
@@ -257,6 +257,7 @@ if __name__ == "__main__":
             WriteEvalUateData(EvalData=trainData.data[trainData.getBatch()], epoch=-1, Env=game)
             trainData.WriteData(file="RandomSampling" + str(iters) + ".txt")
             RandomSamplingForPSR = False
+
         if isbuiltPSR:
             if psrType == "PSR":
                 psrModel.loadModel(epoch=0)

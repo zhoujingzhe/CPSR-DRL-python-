@@ -213,7 +213,6 @@ if __name__ == "__main__":
         psrModel = CompressedPSR(game.getGameName())
     elif psrType == "TPSR":
         psrModel = TransformedPSR(game.getGameName())
-    # loadCheckPoint(trainData=trainData, rewardDict=rewardDict, psrModel=psrModel, epoch=iters)
     PSRpool = Pool(Paramter.ThreadPoolSize, initializer=init, initargs=(Paramter.maxTestID, file, Lock(),))
     print("Finishing Preparation!")
     trainSet = None
@@ -237,6 +236,7 @@ if __name__ == "__main__":
                 aos = "Backup See-that-we-are-docked-in-MRV 0.0"
                 aos = EncodeStringToTest(t=aos, rewardDict=rewardDict)
                 psrModel.Starting(aos=aos)
+                trainSet = None
             if buildOnlyOnce:
                 isbuiltPSR = False
         psrModel.saveModel(epoch=iters)

@@ -28,6 +28,12 @@ class TransformedPSR(CompressedPSR):
             newHMat = np.zeros((histSize, 1))
             newTHMat[0:oldTestSize:, 0:oldHistSize:] = self.THMat
             newHMat[:oldHistSize:, :] = self.HMat
+            for ao in self.validActObset:
+                shape0 = self.aoMats[ao].shape[0]
+                shape1 = self.aoMats[ao].shape[1]
+                aoMats = np.zeros((testSize, histSize))
+                aoMats[0:shape0:, 0:shape1:] = self.aoMats[ao]
+                self.aoMats[ao] = aoMats
             self.THMat = newTHMat
             self.HMat = newHMat
         for ao in self.validActObset:

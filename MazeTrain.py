@@ -164,14 +164,12 @@ def loadCheckPoint(trainData, psrModel, epoch, rewardDict):
                               rewardDict=rewardDict)
     # psrModel.loadModel(epoch=epoch)
 
-
-from Util import writerMemoryintodisk
 import sys
 import time
 from Util import ConvertLastBatchToTrainSet
 vars = sys.float_info.min
 if __name__ == "__main__":
-    psrType = "TPSR"
+    psrType = "CPSR"
     manager = Manager()
     rewardDict = manager.dict()
     ns = manager.Namespace()
@@ -181,7 +179,7 @@ if __name__ == "__main__":
     Paramter.readfile(file=file)
     RandomSamplingForPSR = True
     isbuiltPSR = True
-    onlyBuildOnce = True
+    onlyBuildOnce = False
     game = Maze()
     #################################################
     rewardDict["-0.04"] = 0
@@ -227,17 +225,13 @@ if __name__ == "__main__":
                 aos = "Reset right -0.04"
                 aos = EncodeStringToTest(t=aos, rewardDict=rewardDict)
                 psrModel.Starting(aos=aos)
+                trainSet = None
             if onlyBuildOnce:
                 isbuiltPSR = False
-        # psrModel.writeToExcel(testDict=trainData.testDict, HistDict=trainData.histDict, epoch=iters)
         psrModel.saveModel(epoch=iters)
-        # modelQualityOnMaze(psrModel=psrModel, epoch=iters, Maze=game,
-        #                    numActions=game.getNumActions(), numObservations=game.getNumObservations(),
-        #                    rewardDict=rewardDict)
-
-        # rdict = dict()
-        # copyRewardDict(rewardDict=rdict, rewardDict1=rewardDict)
-        writerMemoryintodisk(file="rewardDict.txt", data=rewardDict.copy())
+        modelQualityOnMaze(psrModel=psrModel, epoch=iters, Maze=game,
+                           numActions=game.getNumActions(), numObservations=game.getNumObservations(),
+                           rewardDict=rewardDict)
         print("Convert sampling data into training forms")
         if trainSet is None:
             trainSet = ConvertToTrainSet(data=trainData, RewardDict=rewardDict,
@@ -266,5 +260,3 @@ if __name__ == "__main__":
                                name=game.getGameName(), rewardDict=rewardDict, ns=ns)
         trainData.WriteData(file="epilsonGreedySampling" + str(iters) + ".txt")
         iters = iters + 1
-        if not onlyBuildOnce:
-            trainSet = None

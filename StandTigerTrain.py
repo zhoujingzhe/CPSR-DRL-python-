@@ -286,7 +286,6 @@ import sys
 import time
 from Util import ConvertLastBatchToTrainSet
 
-# from AgentNet import Agent
 from Agent import Agent
 vars = sys.float_info.min
 if __name__ == "__main__":
@@ -350,9 +349,9 @@ if __name__ == "__main__":
                 aos = "Open-Left tiger-middle-sit -1000.0"
                 aos = EncodeStringToTest(t=aos, rewardDict=rewardDict)
                 psrModel.Starting(aos=aos)
+                trainSet = None
             if onlyBuildOnce:
                 isbuiltPSR = False
-        # psrModel.writeToExcel(testDict=trainData.testDict, HistDict=trainData.histDict, epoch=0)
         psrModel.saveModel(epoch=iters)
         modelQualityOnStandTiger(psrModel=psrModel, epoch=iters, StandTiger=game,
                                  numActions=game.getNumActions(), numObservations=game.getNumObservations(),
@@ -369,7 +368,6 @@ if __name__ == "__main__":
         print("start training")
         tick1 = time.time()
         agent.Train_And_Update(data=trainSet, epoch=iters, pool=PSRpool)
-        # agent.Train_And_Update(data=trainSet, epoch=iters)
         tick2 = time.time()
         print("The time spent on training:" + str(tick2 - tick1))
         agent.SaveWeight(epoch=iters)
@@ -387,5 +385,3 @@ if __name__ == "__main__":
                                name=game.getGameName(), rewardDict=rewardDict, ns=ns)
         trainData.WriteData(file="epilsonGreedySampling" + str(iters) + ".txt")
         iters = iters + 1
-        if not onlyBuildOnce:
-            trainSet = None
